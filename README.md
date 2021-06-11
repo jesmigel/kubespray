@@ -1,2 +1,2 @@
 # kubespray
-Kubespray deployment agains an ESXI host
+Kubespray deployment against an ESXI host
