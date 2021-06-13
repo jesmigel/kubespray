@@ -27,10 +27,12 @@
     - Execute `vagrant ssh ${NODENAME}` to ssh into ${NODENAME}
 
 4. Prepare Ansible inventory
+    - *NOTE*: IP addresses are an input to kubesprays [inventory builder](https://github.com/kubernetes-sigs/kubespray/tree/master/contrib/inventory_builder) script. VM's must be fully provisioned with accessible IPv4 from the ansible host before proceeding
     - Execute `make inventory`. This generates the inventory to be consumed by [kubespray](https://github.com/kubernetes-sigs/kubespray).
     - Update the inventory as needed. Default location is at ./inventory/cluster/hosts.yaml
 
-4. Execute `make playbook` to run kubespray playbook `cluster.yml` against the nodes 
+### Deployment
+1. Execute `make playbook` to run kubespray playbook `cluster.yml` against the nodes 
     - ![alt text](kubespray-7n.jpg "Kubespray 7 node cluster")
 
 ### ToDo
