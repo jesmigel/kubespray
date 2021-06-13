@@ -65,6 +65,10 @@ else
 endif
 	#  ansible-playbook -i inventory/cluster/hosts.yaml  submodules/kubespray/cluster.yml -vv -b
 
+get_kubeconfig:
+	$(_VM) ssh $(shell grep 'Host ' ssh.cfg| head -1 | sed 's/Host //g;') -c 'sudo cp /etc/kubernetes/admin.conf ~/;sudo chown vagrant:vagrant ~/admin.conf'
+	$(_VM) scp $(shell grep 'Host ' ssh.cfg| head -1 | sed 's/Host //g;'):/home/vagrant/admin.conf .
+	echo '#!/bin/bash\nexport KUBECONFIG=./admin.conf' > src.sh
 
 # KUBESPRAY Commands
 # INITIALISE and UPDATE Submodule
