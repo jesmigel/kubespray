@@ -35,9 +35,15 @@
 1. Execute `make playbook` to run kubespray playbook `cluster.yml` against the nodes 
     - ![alt text](kubespray-7n.jpg "Kubespray 7 node cluster")
 
+### Post Deployment
+1. Obtain kubeconfig
+    - Execute `make get_kubeconfig` to store kubeconfig locally to ./admin.conf. It also generate a source script src.sh
+
 ### ToDo
-- Get kubeconfig from remote master node to user's workstation
-- Create a make target that generates a script for sourcing the kubeconfig
-- Add kubeconfig and source script to [.gitignore](./.gitignore)
-- Update [README.md](./README.md) involving kubeconfig
+- Create dedicated directory for provisioning ignore files. Files in scope:
+    - ssh.cfg
+    - .ip
+    - src.sh
+    - env.yaml
+    - admin.conf
 - Create make targets involving an ansible playbook dry-run
