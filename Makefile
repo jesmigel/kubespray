@@ -1,6 +1,7 @@
 .PHONY: up down clean status config login provision \
 	kubespray_repo_init kubespray_tag kubespray_venv_init \
-	kubespray_get_ip kubespray_init_inventory
+	kubespray_get_ip kubespray_init_inventory \
+	submodule inventory playbook
 
 _VM=time vagrant
 
@@ -63,7 +64,19 @@ else
 	@ls -l $(_KUBESPRAY_DIR)
 endif
 	#  ansible-playbook -i inventory/cluster/hosts.yaml  submodules/kubespray/cluster.yml -vv -b
-	
+
+
+# KUBESPRAY Commands
+# INITIALISE and UPDATE Submodule
+submodule: kubespray_repo_init kubespray_tag kubespray_venv_init
+
+# GENERATE inventory
+inventory: kubespray_get_ip kubespray_init_inventory
+
+# RUN playbook
+playbook:
+	ansible-playbook -i inventory/cluster/hosts.yaml  submodules/kubespray/cluster.yml -vv -b
+
 # VENV FUNCTIONS
 define venv_exec
 	$(if [ ! -f "$($(1)/bin/activate)" ], python3 -m venv $(1))
