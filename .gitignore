@@ -1,0 +1,13 @@
+# VAGRANT
+env.yaml
+.vagrant
+
+# Virtualenv
+.venv
+
+# SSH CONFIGURATION
+ssh.cfg
+.ip
+
+# Kubespray inventory
+inventory/*
