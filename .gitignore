@@ -5,13 +5,11 @@ env.yaml
 # Virtualenv
 .venv
 
-# SSH CONFIGURATION
-ssh.cfg
-.ip
-
 # Kubespray inventory
 inventory/*
 
-# KUBECONFIG FILES
-admin.conf
-src.sh
+# POST DEPLOYMENT ARTIFACTS
+.ignore.ssh.cfg
+.ignore.ip
+.ignore.admin.conf
+.ignore.src.sh

@@ -45,12 +45,12 @@ kubespray_venv_init:
 	$(call venv_exec,.venv,pip install -r $(_KUBESPRAY_DIR)/requirements.txt)
 
 kubespray_get_ip:
-	$(_KUBESPRAY_SSH_CFG)
-	$(eval TMP = $(shell $(_VAGRANT_REGEX_IP)))
-	@echo $(TMP) > .ip
+	rm -rf $(_SSH_CFG_FILE) $(_IP_FILE)
+	$(_SSH_CFG) > $(_SSH_CFG_FILE)
+	$(_VAGRANT_REGEX_IP) > $(_IP_FILE)
 
 kubespray_init_inventory:
-	$(eval TMP = ($(shell $(_VAGRANT_REGEX_IP))))
+	$(eval TMP = ($(shell cat $(_IP_FILE))))
 	cd $(_KUBESPRAY_INVENTORY_SRC) && cp -r sample cluster
 ifneq ($(wildcard $(_KUBESPRAY_DIR)),"")
 	$(call venv_exec,.venv, \
@@ -63,12 +63,11 @@ else
 	@echo "$(_KUBESPRAY_DIR) exist"
 	@ls -l $(_KUBESPRAY_DIR)
 endif
-	#  ansible-playbook -i inventory/cluster/hosts.yaml  submodules/kubespray/cluster.yml -vv -b
 
 get_kubeconfig:
-	$(_VM) ssh $(shell grep 'Host ' ssh.cfg| head -1 | sed 's/Host //g;') -c 'sudo cp /etc/kubernetes/admin.conf ~/;sudo chown vagrant:vagrant ~/admin.conf'
-	$(_VM) scp $(shell grep 'Host ' ssh.cfg| head -1 | sed 's/Host //g;'):/home/vagrant/admin.conf .
-	echo '#!/bin/bash\nexport KUBECONFIG=./admin.conf' > src.sh
+	$(_VM) ssh $(shell grep 'Host ' $(_SSH_CFG_FILE)| head -1 | sed 's/Host //g;') -c 'sudo cp $(_KUBECONFIG_SRC) $(_KUBECONFIG_DST);sudo chown vagrant:vagrant $(_KUBECONFIG_DST)'
+	$(_VM) scp $(shell grep 'Host ' $(_SSH_CFG_FILE)| head -1 | sed 's/Host //g;'):$(_KUBECONFIG_DST) $(_KUBECONFIG_LOCAL)
+	echo '#!/bin/bash\nexport KUBECONFIG=$(_KUBECONFIG_LOCAL)' > $(_KUBECONFIG_LOCAL_SCRIPT)
 
 # KUBESPRAY Commands
 # INITIALISE and UPDATE Submodule
